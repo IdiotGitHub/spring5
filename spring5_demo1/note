@@ -49,103 +49,169 @@ Spring框架概述
                     1.ClassPathXmlApplicationContext()
                         xml配置文件相对于classpath的路径
         4.IOC操作Bean管理
-            Bean管理值得是两个操作：
-                1.Spring创建对象
-                2.Spring注入属性
-            Bean管理操作有两种方式
-                1.基于xml配置文件方式实现
-                    创建对象：
-                        <bean id="user" class="com.xiaoxu.spring5.User"/>
-                        id属性：唯一标识，在使用ApplicationContext接口对象获取bean的时候就是值用id号获取
-                        class属性，类全路径
-                        *此种方式在创建对象时，默认执行无参构造方法。（如果实体类中没有定义无参构造方法，则会抛异常）
-                    注入属性（DI）：
-                        1.在<bean></bean>标签内使用<property name="propertyName" value="value"/>标签实现类属性以及值的注入
-                            此方式相当于调用实体类中的setter方法进行属性值设置
-                        2.在<bean></bean>标签内使用<constructor-arg name="name" value="value"/>实现类属性值注入(根据属性名称注入)
-                            在<bean></bean>标签内使用<constructor-arg index="index" value="value"/>实现类属性值注入(根据属性索引注入)
-                            此方法就是调用实体类的有参构造方法进行属性值设置
-                        3.设置空属性值
-                            在<property name=""> <null/></property>
-                        4.设置特殊符号值
-                            使用转义符、使用CDATA结构<property name=""> <value><![CDATA[value]]></value></property>
-                        5.外部bean注入方式
-                            比如
-                            public class UserService {
-                                private UserDao userDao;
-                                public void add() {
-                                    userDao.add();
-                                }
-                            }
-                            想要使用xml配置Bean的方式对userDao 进行注入
-                            使用<property name="name" ref="beanId"/>
-                        6.内部bean注入方式
-                            <property name="name"><bean id="" class=""><property></property></bean></property>
-                        7.集合类型属性注入
-                            1.数组类型属性注入
-                                <property name=""><array><value></value><value></value><value></value>...</array></property>
-                            2.list类型属性注入
-                                <property name=""><list><value></value><value></value><value></value>...</list></property>
-                                如果list的类型是对象，那么<value>标签换成<ref bean="beanId">就行了
-                            3.map类型属性注入
-                                <property name=""><map><entry key="" value=""></entry><entry key="" value=""></entry><entry key="" value=""></entry>...</map></property>
-                            4.set类型属性注入
-                                <property name=""><set><value></value><value></value><value></value>...</set></property>
+        Bean管理值得是两个操作：
+            1.Spring创建对象
+            2.Spring注入属性
+        Bean管理操作有两种方式
+            1.基于xml配置文件方式实现
+            创建对象：
+                <bean id="user" class="com.xiaoxu.spring5.User"/>
+                id属性：唯一标识，在使用ApplicationContext接口对象获取bean的时候就是值用id号获取
+                class属性，类全路径
+                *此种方式在创建对象时，默认执行无参构造方法。（如果实体类中没有定义无参构造方法，则会抛异常）
+            注入属性（DI）：
+                1.在<bean></bean>标签内使用<property name="propertyName" value="value"/>标签实现类属性以及值的注入
+                    此方式相当于调用实体类中的setter方法进行属性值设置
+                2.在<bean></bean>标签内使用<constructor-arg name="name" value="value"/>实现类属性值注入(根据属性名称注入)
+                    在<bean></bean>标签内使用<constructor-arg index="index" value="value"/>实现类属性值注入(根据属性索引注入)
+                    此方法就是调用实体类的有参构造方法进行属性值设置
+                3.设置空属性值
+                    在<property name=""> <null/></property>
+                4.设置特殊符号值
+                    使用转义符、使用CDATA结构<property name=""> <value><![CDATA[value]]></value></property>
+                5.外部bean注入方式
+                    比如
+                    public class UserService {
+                        private UserDao userDao;
+                        public void add() {
+                            userDao.add();
+                        }
+                    }
+                    想要使用xml配置Bean的方式对userDao 进行注入
+                    使用<property name="name" ref="beanId"/>
+                6.内部bean注入方式
+                    <property name="name"><bean id="" class=""><property></property></bean></property>
+                7.集合类型属性注入
+                    1.数组类型属性注入
+                        <property name=""><array><value></value><value></value><value></value>...</array></property>
+                    2.list类型属性注入
+                        <property name=""><list><value></value><value></value><value></value>...</list></property>
+                        如果list的类型是对象，那么<value>标签换成<ref bean="beanId">就行了
+                    3.map类型属性注入
+                        <property name=""><map><entry key="" value=""></entry><entry key="" value=""></entry><entry key="" value=""></entry>...</map></property>
+                    4.set类型属性注入
+                        <property name=""><set><value></value><value></value><value></value>...</set></property>
 
-                2.基于注解方式实现
-            IOC操作 Bean管理（FactoryBean）
-                1.Spring有两种类型bean，一种普通bean，另一种工厂bean（FactoryBean)
-                2.普通bean：在配置文件中定义的bean类型就是返回类型。
-                3.工厂bean：在配置文件中定义的bean类型可以和返回类型不一样
-                将特定的工厂类实现FactoryBean<T>接口即可返回自己想要的类型对象
-            IOC操作 Bean管理（Bean作用域）
-                1.在Spring中可以设置创建的bean实例是单实例还是多实例
-                2.在Spring中bean默认是单实例
-                3.设置bean单实例还是多实例
-                    使用scope属性
-                        1.singleton--单实例
-                        2.prototype--多实例
-                        区别：1.当scope属性为singleton时，在加载spring配置文件时就会创建单实例对象
-                            2.当scope属性值为prototype时，在加载spring配置文件时不会创建实例对象，而是在获取（使用）bean时才创建实例对象，而且每次创建的对象都是不同的对象
-                        3.request：每次创建的对象都会被放入request域中（不常用）
-                        4.session：每次创建的对象都会被放入session域中（不常用）
-            IOC操作 Bean管理（Bean生命周期）
-                1.声明周期：从对象创建到对象销毁的过程
-                2.Bean生命周期
-                    1.通过构造器创建Bean实例
-                    2.为Bean的属性注入值和对其他bean的引用（调用setter的方式）
-                    3.调用Bean的初始化方法，在<bean>标签内使用init-method属性
-                    4.获取Bean对象
-                    5.当容器关闭时，调用Bean的销毁方法，在<bean>标签内使用destroy-method配置（这个地方需要手动调用一下close方法）
-                3.Bean的后置处理器，Bean生命周期有七步
-                    1.通过构造器创建Bean实例
-                    2.为Bean的属性注入值和对其他bean的引用（调用setter的方式）
-                    3.把Bean实例传递给Bean后置处理器的方法postProcessBeforeInitialization
-                    4.调用Bean的初始化方法，在<bean>标签内使用init-method属性
-                    5.把Bean实例传递给Bean后置处理器的方法postProcessAfterInitialization
-                    6.获取Bean对象
-                    7.当容器关闭时，调用Bean的销毁方法，在<bean>标签内使用destroy-method配置（这个地方需要手动调用一下close方法）
-            IOC操作 Bean管理（xml自动装配）
-                1.根据指定装配规则（属性名还是属性类型），Spring自动将匹配的属性值进行注入
-                    就是在<bean>标签内不需要使用<property>等标签进行属性注入了，直接使用autowire属性进行配置自动注入的方式
-                2.自动注入方式有两种，
-                    1.根据名称进行自动装配
-                        autowire="byName"   只要实体类属性名称跟bean id名称相同即可自动装配
-                    2.根据类型进行自动装配
-                        autowire="byType"   根据实体类属性类型自动寻找bean的类型进行自动装配
-                并不常用，xml方式都不常用，注解才是最常用的
-            xml终于结束
-            IOC操作 Bean管理（基于注解方式）
-                Spring针对Bean管理中创建对象提供的注解
-                    1.@Component
-                    2.@Service
-                    3.@Controller
-                    4.@Repository
-                    这四个注解功能是一样的，都可以用来创建bean实例，分为四个不同的名称是为了日常开发时能够更好的区分那些类具有哪些职能。
-                基于注解方式实现对象创建
-                    1.引入spring-aop依赖
-                    2.开启包扫描
-                        在xml配置文件中声明context命名空间（xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/beans/spring-context.xsd")
-                        配置<context:component-scan base-package="需要扫描的包路径"></context:component-scan>
-                        如果需要扫描多个包可以在base-package属性中使用逗号隔开
-                    3.在类上添加注解（四个注解用哪个都行）
+            2.基于注解方式实现
+        IOC操作 Bean管理（FactoryBean）
+            1.Spring有两种类型bean，一种普通bean，另一种工厂bean（FactoryBean)
+            2.普通bean：在配置文件中定义的bean类型就是返回类型。
+            3.工厂bean：在配置文件中定义的bean类型可以和返回类型不一样
+            将特定的工厂类实现FactoryBean<T>接口即可返回自己想要的类型对象
+        IOC操作 Bean管理（Bean作用域）
+            1.在Spring中可以设置创建的bean实例是单实例还是多实例
+            2.在Spring中bean默认是单实例
+            3.设置bean单实例还是多实例
+                使用scope属性
+                    1.singleton--单实例
+                    2.prototype--多实例
+                    区别：1.当scope属性为singleton时，在加载spring配置文件时就会创建单实例对象
+                        2.当scope属性值为prototype时，在加载spring配置文件时不会创建实例对象，而是在获取（使用）bean时才创建实例对象，而且每次创建的对象都是不同的对象
+                    3.request：每次创建的对象都会被放入request域中（不常用）
+                    4.session：每次创建的对象都会被放入session域中（不常用）
+        IOC操作 Bean管理（Bean生命周期）
+            1.声明周期：从对象创建到对象销毁的过程
+            2.Bean生命周期
+                1.通过构造器创建Bean实例
+                2.为Bean的属性注入值和对其他bean的引用（调用setter的方式）
+                3.调用Bean的初始化方法，在<bean>标签内使用init-method属性
+                4.获取Bean对象
+                5.当容器关闭时，调用Bean的销毁方法，在<bean>标签内使用destroy-method配置（这个地方需要手动调用一下close方法）
+            3.Bean的后置处理器，Bean生命周期有七步
+                1.通过构造器创建Bean实例
+                2.为Bean的属性注入值和对其他bean的引用（调用setter的方式）
+                3.把Bean实例传递给Bean后置处理器的方法postProcessBeforeInitialization
+                4.调用Bean的初始化方法，在<bean>标签内使用init-method属性
+                5.把Bean实例传递给Bean后置处理器的方法postProcessAfterInitialization
+                6.获取Bean对象
+                7.当容器关闭时，调用Bean的销毁方法，在<bean>标签内使用destroy-method配置（这个地方需要手动调用一下close方法）
+        IOC操作 Bean管理（xml自动装配）
+            1.根据指定装配规则（属性名还是属性类型），Spring自动将匹配的属性值进行注入
+                就是在<bean>标签内不需要使用<property>等标签进行属性注入了，直接使用autowire属性进行配置自动注入的方式
+            2.自动注入方式有两种，
+                1.根据名称进行自动装配
+                    autowire="byName"   只要实体类属性名称跟bean id名称相同即可自动装配
+                2.根据类型进行自动装配
+                    autowire="byType"   根据实体类属性类型自动寻找bean的类型进行自动装配
+            并不常用，xml方式都不常用，注解才是最常用的
+        xml终于结束
+        IOC操作 Bean管理（基于注解方式）
+            Spring针对Bean管理中创建对象提供的注解
+                1.@Component
+                2.@Service
+                3.@Controller
+                4.@Repository
+                这四个注解功能是一样的，都可以用来创建bean实例，分为四个不同的名称是为了日常开发时能够更好的区分那些类具有哪些职能。
+            基于注解方式实现对象创建
+                1.引入spring-aop依赖
+                2.开启包扫描
+                    在xml配置文件中声明context命名空间（xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/beans/spring-context.xsd")
+                    配置<context:component-scan base-package="需要扫描的包路径"></context:component-scan>
+                    如果需要扫描多个包可以在base-package属性中使用逗号隔开
+                3.在类上添加注解（四个注解用哪个都行）
+            基于注解方式实现属性注入：
+                1.@Autowired：根据属性类型进行自动装配
+                2.@Qulifier：根据属性名称进行注入
+                    需要跟@Autowired配合使用，当某个接口有多个实现类时，直接使用@Autowired不知道要具体注入哪一个实现类，这时可以使用@Qualifier进行指定
+                3.@Resourse：可以根据属性类型，也可以根据名称进行注入
+                    不使用属性name就是根据类型注入，使用name属性就是根据名称注入
+                4.@Value：注入普通类型属性
+2.AOP
+    1.面向切面编程，利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+    2.通俗的讲，不通过修改源代码的方式，在主干功能里面添加新功能。
+AOP底层原理
+    AOP底层使用动态代理
+       1.有接口情况使用JDK动态代理
+       2.没有接口情况，使用CGLIB动态代理
+AOP（JDK动态代理）
+    1.使用JDK动态代理，使用Proxy类里面的方式创建代理对象
+        1.使用newProxyInstance(ClassLoader loader,Class<?>[] interfaces, InvocationHandler h);
+        此方法有三个参数：
+            1.类加载器；
+            2.增强方法所在的类，这个类实现的接口，支持多个接口
+            3.实现这个接口InvocationHandler，创建代理对象，写增强的方法。(这个接口中有一个invoke方法，这个接口会增强所有的方法，)
+AOP(术语)
+    1.连接点
+        类中可以被增强的方法就叫做连接点
+    2.切入点
+        类中实际真正被增强的方法，成为切入点
+    3.通知（增强）
+        实际增强的逻辑部分就叫通知
+        通知有多种类型：
+        1.前置通知、
+            @Before("execution()")
+        2.后置通知、
+            @After("execution()")有无异常都会通知，也叫最终通知
+
+            @AfterReturning()有异常就不通知
+        3.环绕通知、
+            @Around("execution()")
+            可以使用参数的方式执行切入点(ProceedingJoinPoint point) point.proceed();
+        4.异常通知、
+            @AfterThrowing()
+        5.最终通知
+    4.切面
+        是一个动作，把通知应用到切入点的过程就叫做切面
+AOP 操作
+    1.Spring框架中一般都是基于AspectJ实现AOP操作
+    *AspectJ不是Spring组成部分，是一个单独的AOP框架，一般把AspectJ和Spring框架一起使用，进行AOP操作
+    2.基于AspectJ实现AOP操作
+        1.基于xml配置文件方式实现
+        2.基于注解方式实现
+    3.切入点表达式
+        1.切入点表达式作用：知道对哪个类里面的哪个方法进行增强
+        2.语法结构
+        execution([权限修饰符(*表示所有)][返回类型][全类名][方法名称]([参数列表])
+        例子：
+        增强com.atguigu.spring.dao.UserDao.add进行增强
+        execution(* com.atguigu.spring.dao.UserDao.add(...))
+        增强com.atguigu.spring.dao.UserDao中的所有方法进行增强
+        增强com.atguigu.spring.dao包中的所有类、所有方法进行增强
+        execution(* com.atguigu.spring.dao.*.*(..))
+    4.抽取相同切入点
+        @Pointcut(value="execution(* com.xiaoxu.spring5.aop.User.add(..)")
+        public void pointDemo(){}
+    5.有多个增强类对同一个方法进行增强，设置增强类优先级
+        在增强类上面添加注解@Order(数字类型值),数字类型值越小优先级越高
+    **AspectJ完全注解开发，在config类上添加@EnableAspectJAutoProxy()即可
+
