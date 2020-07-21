@@ -1,3 +1,4 @@
+/*
 package com.xiaoxu.spring5.aop;
 
 import com.xiaoxu.spring5.User;
@@ -6,9 +7,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+*/
 /**
  * @author Administrator
- */
+ *//*
+
 public class JDKProxy {
     public static void main(String[] args) {
         Class[] classes = {UserDao.class};
@@ -24,13 +27,15 @@ class UserDaoHandler implements InvocationHandler {
         this.object = object;
     }
 
-    /**
+    */
+/**
      * @param proxy
      * @param method 是将要增强的类中的所有的方法，当你执行哪个方法就会增强哪个方法，因此最好要在这个方法中进行方法的判断
      * @param args
      * @return
      * @throws Throwable
-     */
+     *//*
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //因为会增强所有的方法，因此最好是做一个方法判断
@@ -59,4 +64,4 @@ class UserDaoHandler implements InvocationHandler {
 
         return result;
     }
-}
+}*/
